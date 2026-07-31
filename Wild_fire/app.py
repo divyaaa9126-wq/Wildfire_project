@@ -5,8 +5,15 @@ import json
 import cv2
 import matplotlib.pyplot as plt
 from PIL import Image
+from pathlib import Path
 
-# Set Page Configuration
+# --- Dynamic Path Resolution ---
+# Sets the directory relative to this app.py file location (Wild_fire/)
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_PATH = BASE_DIR / 'model' / 'best_model_mobilenet.keras'
+LABELS_PATH = BASE_DIR / 'labels.json'
+
+# --- Page Configuration ---
 st.set_page_config(
     page_title="Wildfire Detection AI",
     page_icon="🔥",
@@ -42,12 +49,12 @@ st.markdown("""
 # --- Load Model & Labels (Cached for speed) ---
 @st.cache_resource
 def load_wildfire_model():
-    model = tf.keras.models.load_model('model/best_model_mobilenet.keras')
+    model = tf.keras.models.load_model(MODEL_PATH)
     return model
 
 @st.cache_data
 def load_labels():
-    with open('labels.json', 'r') as f:
+    with open(LABELS_PATH, 'r') as f:
         labels = json.load(f)
     return labels
 
